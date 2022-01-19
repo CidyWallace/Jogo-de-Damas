@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private static final int board_size = 8;
-    public Peca[][] matriz;
+    public Piece[][] matriz;
     public ArrayList<TextView> textList = new ArrayList<>();
     private int LineIn;
     private int ColunmIn;
@@ -95,12 +95,12 @@ public class MainActivity extends AppCompatActivity {
 
         listText();
 
-        matriz = new Peca[board_size][board_size];
+        matriz = new Piece[board_size][board_size];
 
         int cont = 0;
         for (int i = 0; i < board_size;i++){
             for(int j = 0; j < board_size;j++){
-                matriz[i][j] = new Peca(new Posicao(i, j), textList.get(cont));
+                matriz[i][j] = new Piece(new Position(i, j), textList.get(cont));
                 cont++;
             }
         }
@@ -127,10 +127,11 @@ public class MainActivity extends AppCompatActivity {
                         Cont--;
                         MovimentPiece(ColunmIn, LineIn, ColunmFor, LineFor);
                     }
+
+                    System.out.println("matriz "+ matriz[coluna][linha].getTextView().getText());
                 }
             });
         }
-
         BuildBoard_P();
         BuildBoard_B();
     }
@@ -204,19 +205,38 @@ public class MainActivity extends AppCompatActivity {
 
     public void BuildBoard_P(){
         for(int i = 0; i < board_size ;i++){
-            matriz[0][i].getTextView().setText("P");
-            matriz[1][i].getTextView().setText("P");
+            int num_par = 0;
+            int num_impar = 1;
+
+            if(i % 2 != 0){
+                num_impar = i;
+            }
+            if(i % 2 != 1){
+                num_par = i;
+            }
+            matriz[0][num_par].getTextView().setText("P");
+            matriz[1][num_impar].getTextView().setText("P");
+            matriz[2][num_par].getTextView().setText("P");
         }
     }
 
     public void BuildBoard_B(){
         for (int j = 0; j < board_size; j++){
-            matriz[6][j].getTextView().setText("B");
-            matriz[7][j].getTextView().setText("B");
+            int num_par = 0;
+            int num_impar = 1;
+            if(j % 2 != 1){
+                num_par = j;
+            }
+            if(j % 2 != 0){
+                num_impar = j;
+            }
+            matriz[5][num_impar].getTextView().setText("B");
+            matriz[6][num_par].getTextView().setText("B");
+            matriz[7][num_impar].getTextView().setText("B");
         }
     }
-    public void MovimentPiece(int coluna1, int linha1, int coluna2, int linha2) {
 
+    public void MovimentPiece(int coluna1, int linha1, int coluna2, int linha2) {
         if (matriz[coluna1][linha1].getTextView().getText().equals("P") && TurnP) {
             if(matriz[coluna2][linha2].getTextView().getText().equals("")){
                 matriz[coluna1][linha1].getTextView().setText("");
